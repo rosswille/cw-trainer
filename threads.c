@@ -224,6 +224,7 @@ int main(int argc, char *argv[])
 
 	while (run_flag) {
 		sym = symbol_chooser();
+		DPRINTF("Chose symbol '%s' Weight=%0.5f\r\n", cw[sym].symbol, cw[sym].weight);
 again:		queue_cw(sym);
 
 		while (1) {
@@ -245,13 +246,17 @@ again:		queue_cw(sym);
 			printf("Quitting\r\n");
 			break;
 		}
-		else if (c == ' ')
+		else if (c == ' ') {
+			cw[sym].weight *= AGAIN_SCALE;
 			goto again;
+		}
 
 		if (toupper(c) == cw[sym].symbol[0]) {
+			cw[sym].weight *= RIGHT_SCALE;
 			printf("Right! %s\r\n", cw[sym].symbol);
 		}
 		else {
+			cw[sym].weight *= WRONG_SCALE;
 			sq_put(&bad_symbol);
 			printf("Wrong! %s\r\n", cw[sym].symbol);
 		}

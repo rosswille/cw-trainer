@@ -44,6 +44,10 @@
 #define DPRINTF(args...)      	  	do {} while (0)
 #endif
 
+#define RIGHT_SCALE	0.9
+#define WRONG_SCALE	1.5
+#define AGAIN_SCALE	1.1
+
 struct settings_struct {
 	char alsadev[32];
 	double wpm;
