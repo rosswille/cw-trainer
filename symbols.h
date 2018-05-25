@@ -28,5 +28,6 @@ extern struct symbol_struct bad_symbol;
 
 extern int symbols_create(void);
 extern void symbols_destroy(void);
+extern int symbol_chooser(void);
 
 #endif

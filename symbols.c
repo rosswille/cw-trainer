@@ -183,3 +183,48 @@ void symbols_destroy(void)
 {
 	free_symbols();
 }
+
+/*
+ * Choose a symbol randomly based on the symbol weights.
+ */
+int symbol_chooser(void)
+{
+	int i;
+	float sum;
+	float rand;
+
+	/* find the total weight */
+	sum = 0.0;
+	for (i = 0; i < n_cw; i++) {
+		/* negative weights are not allowed */
+		if (cw[i].weight < 0.0)
+			cw[i].weight = 0.0;
+		sum += cw[i].weight;
+	}
+
+	/*
+	 * If the weights of all symbols are zero,
+	 * choose any symbol at random.
+	 */
+	if (sum == 0.0)
+		return (lrand48() % n_cw);
+
+	/* pick a random point within the weight range */
+	rand = drand48() * sum;
+
+	/* locate the symbol containing that point */
+	sum = 0.0;
+	for (i = 0; i < n_cw; i++) {
+		sum += cw[i].weight;
+		if (rand < sum)
+			break;
+	}
+	/*
+	 * There's a slight chance of exceeding the range due
+	 * to rounding, but it's not statistally significant.
+	 */
+	if (i >= n_cw)
+		i = n_cw - 1;
+
+	return i;
+}

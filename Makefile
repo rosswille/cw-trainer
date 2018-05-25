@@ -13,6 +13,7 @@ TARGET := cw-trainer
 
 OBJS := \
 alsa.o \
+config.o \
 morse.o \
 symbols.o \
 sym-queue.o \

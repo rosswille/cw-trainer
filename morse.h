@@ -17,12 +17,13 @@
 
 #define UNIT_MS_FROM_WPM(_wpm)	(1200.0 / (_wpm))
 
-struct cw_encoding_struct {
+struct cw_struct {
 	char *symbol;
 	char *cw;
+	float weight;
 };
 
-extern const struct cw_encoding_struct cw_encoding[];
+extern struct cw_struct cw[];
 extern const int n_cw;
 
 #endif

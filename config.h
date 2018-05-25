@@ -44,8 +44,6 @@
 #define DPRINTF(args...)      	  	do {} while (0)
 #endif
 
-int run_flag;
-
 struct settings_struct {
 	char alsadev[32];
 	double wpm;
@@ -56,6 +54,10 @@ struct settings_struct {
 	int n_chans;
 };
 
+extern int run_flag;
 extern struct settings_struct settings;
+
+extern void config_read(void);
+extern void config_write(void);
 
 #endif

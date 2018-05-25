@@ -102,7 +102,7 @@ static void queue_cw(int index)
 {
 	char *p;
 
-	for (p = cw_encoding[index].cw; *p; p++) {
+	for (p = cw[index].cw; *p; p++) {
 		switch (*p) {
 		case '.':
 			sq_put(&gap_symbol);
@@ -134,7 +134,7 @@ static void show_help(void)
 int main(int argc, char *argv[])
 {
 	unsigned char kbd_buf[16];
-	int index;
+	int sym;
 	int n;
 	int c;
 
@@ -146,6 +146,8 @@ int main(int argc, char *argv[])
 	settings.rise_ms = 5.0;
 	settings.sample_rate = 48000;
 	settings.n_chans = 2;
+
+	config_read();
 
 	while (1) {
 		static struct option long_options[] = {
@@ -221,8 +223,8 @@ int main(int argc, char *argv[])
 	start_threads();
 
 	while (run_flag) {
-		index = (lrand48() >> 8) % 26;
-again:		queue_cw(index);
+		sym = symbol_chooser();
+again:		queue_cw(sym);
 
 		while (1) {
 			n = tty_read(kbd_buf, 1);
@@ -246,12 +248,12 @@ again:		queue_cw(index);
 		else if (c == ' ')
 			goto again;
 
-		if (toupper(c) == cw_encoding[index].symbol[0]) {
-			printf("Right! %s\r\n", cw_encoding[index].symbol);
+		if (toupper(c) == cw[sym].symbol[0]) {
+			printf("Right! %s\r\n", cw[sym].symbol);
 		}
 		else {
 			sq_put(&bad_symbol);
-			printf("Wrong! %s\r\n", cw_encoding[index].symbol);
+			printf("Wrong! %s\r\n", cw[sym].symbol);
 		}
 	}
 
@@ -262,6 +264,8 @@ again:		queue_cw(index);
 	sq_fini();
 	tty_fini();
 	symbols_destroy();
+
+	config_write();
 
 	return 0;
 }
